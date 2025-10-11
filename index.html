@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Rides CEL - Business Card</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        h1 { font-size: 32px; color: #1a202c; margin-bottom: 8px; font-weight: 700; }
+        .tagline { font-size: 16px; color: #718096; margin-bottom: 25px; }
+        .phone { font-size: 24px; font-weight: 600; color: #667eea; margin-bottom: 30px; }
+        .qr-section h2 { font-size: 18px; color: #2d3748; margin-bottom: 15px; font-weight: 600; }
+        .qr-box {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            border: 2px solid #e2e8f0;
+            margin-bottom: 10px;
+        }
+        .qr-box img { width: 200px; height: 200px; display: block; }
+        .hint { font-size: 14px; color: #718096; margin-bottom: 30px; }
+        .buttons { display: flex; flex-direction: column; gap: 12px; }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-call { background: white; color: #667eea; border: 2px solid #667eea; }
+        .btn-share { background: #48bb78; color: white; }
+        .alert {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #48bb78;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.4);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        .alert.show { transform: translateX(-50%) translateY(0); }
+        @media (max-width: 480px) {
+            .card { padding: 30px 20px; }
+            h1 { font-size: 28px; }
+            .phone { font-size: 20px; }
+            .qr-box img { width: 180px; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🚗</div>
+        <h1>Ride Service</h1>
+        <p class="tagline">by Sebastian - Professional Rides</p>
+        <div class="phone">(714) 204-6318</div>
+        
+        <div class="qr-section">
+            <h2>Scan to Save Contact</h2>
+            <div class="qr-box">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQMAAABDsxw2AAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEW0lEQVRogd1aQZKrOhBrigVLH4GbhItRQCoXY27CEViycKWfpHby5v/VWxqzmBCjTJXtbrVaxuzfrtVx4TPtNvnRnQ/ev9M+eLZl2G3k86Nq2IzhacDtj3vvz9NstLTZdFnv2+A2bmZDG7Dk12QYw0e2zt+EPc/pGrf0xJPx5e87wAbfrLsUfYD5uZ7YX/zS99wYDAtydgzilVvr3Fo/Vuzp/v91uzNM0XuQTqaMtWDYnkva3V8B+x3kdcJENcMxp59r6o8FH6Ng1/g6QTX5NyPdGxYXxh4DuZVB3AfPcrct/6c61AlbyTHcwN0w1jE6/exOY13A1WsNmoABeCE8e6TZjj9inOQsDwxb1oUUe3p7GB+JQXfOfont7kCqvsX96vtQOexU9DqiF9mGmfpBWLClTZ/wbgQGUkXNY3lA7F7m52J2cU+pAbI9yoLcHLb603fm5oNjT1dSroxe8pJnoKlKa4aRRiVXMFNEckIRDxV94APbLC5qAqYFUQXEuhykVEQvugem7ptrtKW31Q2b8XdiAk6+c+wH1Jj4zV8lNTXTJmBOPuWl5o5Uk4qCUcnvFdANwHoFLqaNxpX3gLH+TaSazhUBXjlsPVHEKVfe306ccmVSbg47d1hBfn9Y6bdf2Mw9h0TJiQ05KwbXKDcEwxJE+XCQKscSBA0TdGOztHGhqoZhbIj6wLEnOYZ1Adw6p03DYp8WYNTNVwizYBw0d6j1VDAL9rREb82wOTpU0stHPoeZEEP8JlK9P2wlZw6s6NHyyMZ7Rx7SIEIeTm3AZlp7aO5OduoS06NaiGvMjN6sVv6oGrby+RBCklTjNIjY8mDyz5ipxPb9YRG9h7odp0HEeN3SXvq5QrctwCS2yUjMU5BqF/dTaE9l7bdfqBSmlscQql7cPFfmOYeUk7kYRLeHSZhdxV1GZ6R+AUHMf7DYxNQ1qxvGS0KytDyIR2kstjy0zsdX2dPbw+bwuuSqU0VbOfvgk46/zPbJ05vDZDyzfMikfPIbVc1UDCKWD3Ju3bBt2C9M6xFq+ePmcTPl5s2yUBqAsQJi9lk9q1NFHyzy8oyWSGRrAyYtTYNhD9+LB8bnwtRd5WHGkULVMBlEV1RswCgkM908K9fYDIymORZk9TfPs5ZixyYv1pGXM+SaYbO88dE/B1VCofMZ2PLoCPhsB4YYDRXNXufB9zHU8mysGP0xl/JxexhUTZSPKU4MOgkzFhO5Kybv76gaVgyiFzhm17G+XhSSb8mWh+envzyuO8MkNNl9I3rZ8rDYn2HN8ljfS8vTBMzISIDRR1ri9P/NFxjUErGN7a66YWsIM50qxknxKBiZdQthpiC/P0zyOUzm6IxiQby8LZRjt+uG6T2uw0L1bxGWaxxUdXGy2l0twfTxfZGSpEqTmQ7t9zyrEZjqRq8jV4obBrHE9FfV1Axj9LJiP6gt/8oVBi6e5/LCTAOwoBp/he/F2YNN+U4DAhp14bOnDcD+7foDckE4Z4uVp6cAAAAASUVORK5CYII=" alt="QR Code">
+            </div>
+            <p class="hint">Point your camera here</p>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="saveContact()">💾 Save Contact</button>
+            <a href="tel:+17142046318" class="btn btn-call">📞 Call Now</a>
+            <button class="btn btn-share" onclick="share()">📤 Share</button>
+        </div>
+    </div>
+    <div id="alert" class="alert"></div>
+
+    <script>
+        const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:Ride Service
+ORG:Sebastian's Ride Service
+TEL;TYPE=CELL:+17142046318
+URL:http://localhost:3000
+NOTE:Professional Ride Service - Available 24/7 - Book rides online!
+END:VCARD`;
+
+        function saveContact() {
+            try {
+                const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'RideService-Contact.vcf';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                
+                // Try to trigger download
+                a.click();
+                
+                // Clean up after a delay
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                showAlert('Contact saved! Check your downloads 📱');
+            } catch (err) {
+                console.error('Save error:', err);
+                showAlert('Tap and hold to save, or use the QR code! 👆');
+            }
+        }
+
+        async function share() {
+            const text = 'Ride Service by Sebastian - Professional Rides\nPhone: (714) 204-6318\nBook online: http://localhost:3000';
+            try {
+                if (navigator.share) {
+                    await navigator.share({ 
+                        title: 'Ride Service', 
+                        text: text 
+                    });
+                    showAlert('Shared! ✅');
+                } else {
+                    copyPhone();
+                }
+            } catch(e) {
+                if (e.name !== 'AbortError') {
+                    copyPhone();
+                }
+            }
+        }
+
+        function copyPhone() {
+            const phone = '(714) 204-6318';
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(phone).then(() => {
+                        showAlert('Phone copied! 📋');
+                    }).catch(() => {
+                        fallbackCopy(phone);
+                    });
+                } else {
+                    fallbackCopy(phone);
+                }
+            } catch(e) {
+                fallbackCopy(phone);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const t = document.createElement('textarea');
+            t.value = text;
+            t.style.position = 'fixed';
+            t.style.left = '-9999px';
+            t.style.top = '0';
+            document.body.appendChild(t);
+            t.focus();
+            t.select();
+            
+            try {
+                const success = document.execCommand('copy');
+                if (success) {
+                    showAlert('Phone copied! 📋');
+                } else {
+                    showAlert('Phone: (714) 204-6318');
+                }
+            } catch (err) {
+                showAlert('Phone: (714) 204-6318');
+            }
+            
+            document.body.removeChild(t);
+        }
+
+        function showAlert(msg) {
+            const alert = document.getElementById('alert');
+            alert.textContent = msg;
+            alert.classList.add('show');
+            setTimeout(() => alert.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+</html>
